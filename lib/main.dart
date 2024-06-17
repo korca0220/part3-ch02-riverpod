@@ -1,4 +1,6 @@
+import 'package:ch02_fastcampus_riverpod/provider/counter_consumer_widget.dart';
 import 'package:ch02_fastcampus_riverpod/provider/counter_provider.dart';
+import 'package:ch02_fastcampus_riverpod/provider/counter_stateful_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,7 +29,23 @@ class MyHomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: const CounterWidget(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const CounterWidget(),
+          const CounterStatefulWidget(),
+          Consumer(
+            builder: (context, ref, child) {
+              return ElevatedButton(
+                onPressed: () {
+                  ref.read(counterProvider).decrement();
+                },
+                child: const Text('감소시키기'),
+              );
+            },
+          ),
+        ],
+      ),
       floatingActionButton: Consumer(
         builder: (context, ref, child) {
           final counter = ref.read(counterProvider);
@@ -41,24 +59,6 @@ class MyHomePage extends ConsumerWidget {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class CounterWidget extends ConsumerWidget {
-  const CounterWidget({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final counter = ref.read(counterProvider);
-
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          counter.increment();
-        },
-        child: const Text('증가시키키'),
       ),
     );
   }
