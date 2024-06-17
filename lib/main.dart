@@ -21,12 +21,13 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends ConsumerWidget {
   const MyHomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      body: const CounterWidget(),
       floatingActionButton: Consumer(
         builder: (context, ref, child) {
           final counter = ref.read(counterProvider);
@@ -40,6 +41,24 @@ class MyHomePage extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class CounterWidget extends ConsumerWidget {
+  const CounterWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final counter = ref.read(counterProvider);
+
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          counter.increment();
+        },
+        child: const Text('증가시키키'),
       ),
     );
   }
