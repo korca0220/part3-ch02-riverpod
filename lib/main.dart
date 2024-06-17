@@ -1,6 +1,4 @@
-import 'package:ch02_fastcampus_riverpod/provider/counter_consumer_widget.dart';
-import 'package:ch02_fastcampus_riverpod/provider/counter_provider.dart';
-import 'package:ch02_fastcampus_riverpod/provider/counter_stateful_widget.dart';
+import 'package:ch02_fastcampus_riverpod/state_provider/my_state_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,30 +27,25 @@ class MyHomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const CounterWidget(),
-          const CounterStatefulWidget(),
-          Consumer(
-            builder: (context, ref, child) {
-              return ElevatedButton(
-                onPressed: () {
-                  ref.read(counterProvider).decrement();
-                },
-                child: const Text('감소시키기'),
-              );
-            },
-          ),
-        ],
+      body: Center(
+        child: Consumer(builder: (context, ref, child) {
+          final counter = ref.watch(counterStateProvider);
+
+          return Text(
+            "$counter",
+            style: const TextStyle(
+              fontSize: 20,
+            ),
+          );
+        }),
       ),
       floatingActionButton: Consumer(
         builder: (context, ref, child) {
-          final counter = ref.read(counterProvider);
-
           return FloatingActionButton(
             onPressed: () {
-              counter.increment();
+              ref
+                  .read(counterStateProvider.notifier)
+                  .update((value) => value += 1);
             },
             child: const Icon(
               Icons.add,
