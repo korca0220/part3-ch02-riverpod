@@ -1,4 +1,4 @@
-import 'package:ch02_fastcampus_riverpod/future_provider/simple_future_provider.dart';
+import 'package:ch02_fastcampus_riverpod/change_notifier_provider/my_change_notifier_provider.dart';
 import 'package:ch02_fastcampus_riverpod/state_notifier_provider/my_state_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -61,34 +61,36 @@ class MyTwoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: MyFutureProviderWidget(),
-    );
-  }
-}
+    return Scaffold(
+      body: Center(
+        child: Consumer(
+          builder: (context, ref, child) {
+            final counter = ref.watch(counterChangeNotifierProvider);
 
-class MyFutureProviderWidget extends ConsumerWidget {
-  const MyFutureProviderWidget({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final intValue = ref.watch(simpleIntFutureProvider);
-
-    return Center( 
-      child: intValue.when(
-        data: (data) => Text(
-          '$data',
-          style: const TextStyle(
-            fontSize: 20,
-          ),
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('카운터 값: ${counter.counterValue}'),
+                ElevatedButton(
+                  onPressed: () {
+                    ref
+                        .read(counterChangeNotifierProvider.notifier)
+                        .increment();
+                  },
+                  child: const Text('증가'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ref
+                        .read(counterChangeNotifierProvider.notifier)
+                        .decrement();
+                  },
+                  child: const Text('감소'),
+                ),
+              ],
+            );
+          },
         ),
-        error: (error, stack) => Text(
-          '$error',
-          style: const TextStyle(
-            fontSize: 20,
-          ),
-        ),
-        loading: () => const Text('로딩중'),
       ),
     );
   }
