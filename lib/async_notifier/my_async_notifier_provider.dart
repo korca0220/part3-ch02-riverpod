@@ -12,7 +12,6 @@ final counterAsyncNotifierProvider =
 final tmpUserCountProvider = FutureProvider((ref) async {
   Dio dio = Dio();
   final result = await dio.get("https://jsonplaceholder.typicode.com/users");
-  print(result.data);
 
   final users = result.data as List<dynamic>;
 
